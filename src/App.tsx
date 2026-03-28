@@ -13,6 +13,8 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 
+import { useNavigate } from 'react-router-dom'
+
 type FormState = {
   email: string
   password: string
@@ -32,11 +34,31 @@ const initialForm: FormState = {
 }
 
 export default function App() {
+  const navigate = useNavigate()
   const [step, setStep] = useState(0)
   const [form, setForm] = useState<FormState>(initialForm)
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   const canContinueAuth = form.email.trim() !== '' && form.password.trim() !== ''
   const canFinish = form.emergencyContact.trim() !== ''
+
+  const handleFinish = async () => {
+    setSubmitting(true)
+    setSubmitError(null)
+    try {
+      const res = await fetch('http://localhost:8080/onboard', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) throw new Error(`Error del servidor: ${res.status}`)
+      navigate('/devices')
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : 'No se pudo conectar con el servidor.')
+      setSubmitting(false)
+    }
+  }
 
   const thresholdSummary = useMemo(() => {
     const flags = [
@@ -239,7 +261,7 @@ export default function App() {
                   className="space-y-4"
                   onSubmit={(e) => {
                     e.preventDefault()
-                    if (canFinish) next()
+                    if (canFinish) handleFinish()
                   }}
                 >
                   <div className="space-y-2">
@@ -253,12 +275,18 @@ export default function App() {
                     />
                   </div>
 
+                  {submitError && (
+                    <p className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-600">
+                      {submitError}
+                    </p>
+                  )}
+
                   <div className="flex gap-3 pt-2">
-                    <Button type="button" variant="outline" className="flex-1" onClick={back}>
+                    <Button type="button" variant="outline" className="flex-1" onClick={back} disabled={submitting}>
                       Atrás
                     </Button>
-                    <Button type="submit" className="flex-1" disabled={!canFinish}>
-                      Finalizar
+                    <Button type="submit" className="flex-1" disabled={!canFinish || submitting}>
+                      {submitting ? 'Enviando…' : 'Finalizar'}
                     </Button>
                   </div>
                 </form>
