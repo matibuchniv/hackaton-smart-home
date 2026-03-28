@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public interface EstrategiaDeRespuesta {
    
-    public boolean aplica(Long ultimaMedicion);
+    public boolean aplica(Integer ultimaMedicion);
 
     public void ejecutar();
 }

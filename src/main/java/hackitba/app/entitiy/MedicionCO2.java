@@ -15,10 +15,10 @@ public class MedicionCO2 {
     @GeneratedValue
     private Long id;
 
-    private Long valor;
+    private Integer valor;
     private LocalDateTime fechaHoraMedicion;
 
-     public MedicionCO2(Long valor, LocalDateTime fechaHoraMedicion) {
+     public MedicionCO2(Integer valor, LocalDateTime fechaHoraMedicion) {
         this.valor = valor;
         this.fechaHoraMedicion = fechaHoraMedicion;
     }

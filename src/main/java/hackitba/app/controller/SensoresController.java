@@ -25,7 +25,7 @@ public class SensoresController {
     }
 
     @PostMapping("/sensor-value")
-    public String tomarMedicion(@RequestBody Long medicionCO2) {
+    public String tomarMedicion(@RequestBody Integer medicionCO2) {
 
         MedicionCO2 medicion = new MedicionCO2(medicionCO2,LocalDateTime.now());
 

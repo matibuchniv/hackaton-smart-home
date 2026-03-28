@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class EstrategiaVerdeAmarilla implements EstrategiaDeRespuesta {
     
     @Override
-    public boolean aplica(Long ultimaMedicion) {
+    public boolean aplica(Integer ultimaMedicion) {
         if (ultimaMedicion <= 800L) { return true;}    
         else return false;
     }
