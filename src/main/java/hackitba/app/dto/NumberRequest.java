@@ -1,5 +1,5 @@
 package hackitba.app.dto;
 
-public record NumberRequest(Integer number) {
+public record NumberRequest(Integer value) {
     
 }

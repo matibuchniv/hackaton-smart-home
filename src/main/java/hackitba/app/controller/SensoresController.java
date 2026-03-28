@@ -1,5 +1,6 @@
 package hackitba.app.controller;
 
+import java.io.Console;
 import java.time.LocalDateTime;
 
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,9 @@ public class SensoresController {
     @PostMapping("/sensor-value")
     public ResponseEntity<String> tomarMedicion(@RequestBody NumberRequest request) {
 
-        Integer numero = request.number(); 
+        Integer numero = request.value(); 
+
+        System.out.print("numero recibido: " +  "numero.toString()");
 
         MedicionCO2 medicion = new MedicionCO2(numero,LocalDateTime.now());
 
