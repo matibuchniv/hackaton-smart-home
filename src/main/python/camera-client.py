@@ -18,59 +18,65 @@ last_detection_time = None
 last_person_value = False
 post_sent = False
 
-while True:
-    ret, frame = cap.read()
-    if not ret:
-        print("Failed to grab frame")
-        break
+try:
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            print("Failed to grab frame")
+            break
 
-    h, w, _ = frame.shape
-    middle_x = w // 2
+        h, w, _ = frame.shape
+        middle_x = w // 2
 
-    cv2.line(frame, (middle_x, 0), (middle_x, h), (255, 0, 0), 2)
+        results = model(frame, imgsz=640, conf=0.7, verbose=False)
 
-    results = model(frame, imgsz=640, conf=0.25, verbose=False)
+        person_detected_this_frame = False
+        detected_person_value = last_person_value
 
-    person_detected_this_frame = False
+        for result in results:
+            for box in result.boxes:
+                cls_id = int(box.cls[0].item())
+                class_name = model.names[cls_id]
 
-    for result in results:
-        for box in result.boxes:
-            cls_id = int(box.cls[0].item())
-            class_name = model.names[cls_id]
+                if class_name != "person":
+                    continue
 
-            if class_name == "person":
                 person_detected_this_frame = True
 
                 x1, y1, x2, y2 = map(int, box.xyxy[0].tolist())
                 center_x = (x1 + x2) // 2
 
                 if center_x < middle_x:
-                    last_person_value = True
+                    detected_person_value = True
                 elif center_x > middle_x:
-                    last_person_value = False
+                    detected_person_value = False
 
-    if person_detected_this_frame:
-        last_detection_time = time.time()
-        post_sent = False
+        if person_detected_this_frame:
+            last_detection_time = time.time()
+            last_person_value = detected_person_value
+            post_sent = False
 
-    if last_detection_time is not None and not post_sent:
-        if time.time() - last_detection_time >= 5:
-            try:
-                print(last_person_value)
-                response = requests.post(
-                    JAVA_ENDPOINT,
-                    json={"person": last_person_value},
-                    timeout=5
-                )
-                print("Sent:", last_person_value, "status:", response.status_code)
-                post_sent = True
-            except requests.RequestException as e:
-                print("Error sending POST:", e)
+        if last_detection_time is not None and not post_sent:
+            if time.time() - last_detection_time >= 5:
+                try:
+                    payload = {"person": last_person_value}
+                    print("Sending:", payload)
 
-    cv2.imshow("Detection", frame)
+                    response = requests.post(
+                        JAVA_ENDPOINT,
+                        json=payload,
+                        timeout=5
+                    )
 
-    if cv2.waitKey(1) & 0xFF == ord("q"):
-        break
+                    print("Sent:", last_person_value, "status:", response.status_code)
+                    post_sent = True
+                except requests.RequestException as e:
+                    print("Error sending POST:", e)
+                
+                last_detection_time = None
 
-cap.release()
-cv2.destroyAllWindows()
+except KeyboardInterrupt:
+    print("Stopped by user")
+
+finally:
+    cap.release()
