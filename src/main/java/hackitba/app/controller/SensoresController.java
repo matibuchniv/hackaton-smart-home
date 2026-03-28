@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import hackitba.app.entitiy.MedicionCO2;
 import hackitba.app.service.ServiceMedicionesCO2;
-import hackitba.app.service.ServiceRespuesta;
+import hackitba.app.service.service_respuesta.ServiceRespuesta;
 import lombok.RequiredArgsConstructor;
 
 @RestController
