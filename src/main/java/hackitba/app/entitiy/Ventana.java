@@ -1,9 +1,11 @@
 package hackitba.app.entitiy;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "ventanas")
+@Data
 public class Ventana {
 
     @Id
@@ -13,7 +15,6 @@ public class Ventana {
     private String descripcion;
     private Boolean abierta;
 
-    // Constructor vacío obligatorio
     public Ventana() {}
 
     public Ventana(String descripcion) {
@@ -29,24 +30,4 @@ public class Ventana {
         this.abierta = false; 
     }
 
-    // Getters y Setters
-    public Long getId() {
-        return id;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public Boolean getAbierta() {
-        return abierta;
-    }
-
-    public void setAbierta(Boolean abierta) {
-        this.abierta = abierta;
-    }
 }
