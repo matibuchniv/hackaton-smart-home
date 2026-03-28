@@ -24,7 +24,7 @@ public class SensoresController {
         return "hello world";
     }
 
-    @PostMapping("/medicionCO2")
+    @PostMapping("/sensor-value")
     public String tomarMedicion(@RequestBody Long medicionCO2) {
 
         MedicionCO2 medicion = new MedicionCO2(medicionCO2,LocalDateTime.now());
@@ -35,7 +35,7 @@ public class SensoresController {
         return "ok";
     }
 
-    @PostMapping("/hayPersonas")
+    @PostMapping("/person-status")
     public String actualizarPersonaPresente(@RequestBody boolean hayPersonas) {
 
         serviceRespuesta.setHayPersonas(hayPersonas);
