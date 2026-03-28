@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class VentantaController {
     
-    @Autowired
     private final ServiceVentana serviceVentana;
 
     @PostMapping("/abrirVentanas")

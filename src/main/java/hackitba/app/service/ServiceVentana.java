@@ -11,6 +11,7 @@ import hackitba.app.repository.RepoVentana;
 
 @Service
 public class ServiceVentana {
+
     @Autowired
     private RepoVentana repoVentana;
 
@@ -25,13 +26,16 @@ public class ServiceVentana {
         return repoVentana.findAll();
     }
 
-
     public void abrirVentanas() {
-          List<Ventana> ventanas = repoVentana.findAll();
+        List<Ventana> ventanas = repoVentana.findAll();
 
         for (Ventana v : ventanas) {
-                        ventanaIoT.abrir(v.getDeviceId()); 
-            v.abrir();
+            if (v.getDeviceId() != null && !v.getDeviceId().isEmpty()) {
+                ventanaIoT.abrir(v.getDeviceId());
+                v.abrir();
+            } else {
+                System.out.println("⚠️ Ventana sin deviceId: " + v.getDescripcion());
+            }
         }
 
         repoVentana.saveAll(ventanas);
@@ -49,7 +53,3 @@ public class ServiceVentana {
     }
 
 }
-
-
-
-
