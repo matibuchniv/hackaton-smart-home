@@ -14,12 +14,17 @@ public class Ventana {
 
     private String descripcion;
     private Boolean abierta;
+    private String deviceId;
 
     public Ventana() {}
 
     public Ventana(String descripcion) {
         this.descripcion = descripcion;
         this.abierta = false;
+    }
+
+    public String getDeviceId(){
+        return this.deviceId;
     }
 
     public void abrir(){

@@ -1,6 +1,5 @@
 package hackitba.app.controller;
 
-import java.io.Console;
 import java.time.LocalDateTime;
 
 import org.springframework.http.ResponseEntity;
