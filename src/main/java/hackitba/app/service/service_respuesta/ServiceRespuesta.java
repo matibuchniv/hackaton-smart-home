@@ -11,27 +11,41 @@ import hackitba.app.repository.RepoMediciones;
 public class ServiceRespuesta {
 
     private boolean hayPersonas = true;
-    private List<EstrategiaDeRespuesta> estrategias;
-    private RepoMediciones repoMediciones;
+    private final List<EstrategiaDeRespuesta> estrategias;
+    private final RepoMediciones repoMediciones;
 
-    public ServiceRespuesta(List<EstrategiaDeRespuesta> estrategias,RepoMediciones repoMediciones) {
+    public ServiceRespuesta(List<EstrategiaDeRespuesta> estrategias,
+                            RepoMediciones repoMediciones) {
         this.estrategias = estrategias;
         this.repoMediciones = repoMediciones;
-    } 
+    }
 
     public void setHayPersonas(boolean hayPersonas) {
         this.hayPersonas = hayPersonas;
-    } 
+    }
 
     public void evaluarRespuesta() {
 
-        MedicionCO2 medicion = repoMediciones.findAllOrderByFechaAsc().getLast();
-        EstrategiaDeRespuesta estrategia = estrategias.stream().filter( strategy -> strategy.aplica(medicion.getValor())).findFirst().orElseThrow(() -> new RuntimeException("no se cubrio ningun caso existente"));
+        List<MedicionCO2> mediciones = repoMediciones.findAllOrderByFechaAsc();
 
+        if (mediciones.isEmpty()) {
+            throw new RuntimeException("❌ No hay mediciones en la base de datos");
+        }
+
+        MedicionCO2 medicion = mediciones.get(mediciones.size() - 1);
+
+        if (medicion.getValor() == null) {
+            throw new RuntimeException("❌ El valor de la medición es null");
+        }
+
+        System.out.println("📊 Valor medición: " + medicion.getValor());
+        System.out.println("📊 Estrategias disponibles: " + estrategias.size());
+
+        EstrategiaDeRespuesta estrategia = estrategias.stream()
+                .filter(strategy -> strategy.aplica(medicion.getValor()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("❌ Ninguna estrategia aplica"));
+
+        estrategia.ejecutar(medicion.getValor());
     }
-
-
-
-
-    
 }

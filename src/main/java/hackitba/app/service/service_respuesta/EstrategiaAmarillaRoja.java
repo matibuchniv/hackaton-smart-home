@@ -14,6 +14,6 @@ public class EstrategiaAmarillaRoja implements EstrategiaDeRespuesta {
     }
 
     @Override
-    public void ejecutar() {
+    public void ejecutar(Integer ultimaMedicion) {
     }
 }

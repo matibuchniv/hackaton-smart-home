@@ -27,7 +27,7 @@ public class WhatsAppAlertService {
         Twilio.init(accountSid, authToken);
     }
 
-    public void sendAlert(Long co2Level) {
+    public void sendAlert(Integer co2Level) {
         String body = String.format(
             "ALERTA CO2\nNivel peligroso detectado: %d ppm\nEvacúe el área inmediatamente.",
             co2Level
@@ -41,4 +41,6 @@ public class WhatsAppAlertService {
 
         System.out.println("Mensaje enviado: " + message.getSid());
     }
+
+
 }

@@ -1,9 +1,15 @@
 package hackitba.app.service.service_respuesta;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import hackitba.app.service.WhatsAppAlertService;
 
 @Component
 public class EstrategiaRoja implements EstrategiaDeRespuesta {
+
+    @Autowired
+    private WhatsAppAlertService whatsAppAlertService;
     
     @Override
     public boolean aplica(Integer ultimaMedicion) {
@@ -14,7 +20,8 @@ public class EstrategiaRoja implements EstrategiaDeRespuesta {
     }
 
     @Override
-    public void ejecutar() {
+    public void ejecutar(Integer ultimaMedicion) {
+        whatsAppAlertService.sendAlert(ultimaMedicion);
     }
 }
 

@@ -7,5 +7,5 @@ public interface EstrategiaDeRespuesta {
    
     public boolean aplica(Integer ultimaMedicion);
 
-    public void ejecutar();
+    public void ejecutar(Integer ultimaMedicion);
 }

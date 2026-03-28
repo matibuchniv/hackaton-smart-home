@@ -14,7 +14,7 @@ public class TestController {
 
     @GetMapping("/mensaje")
     public String enviarMensaje() {
-        whatsAppAlertService.sendAlert(8000L);
+        whatsAppAlertService.sendAlert(8000);
         return "mensaje enviado";
     }
     
