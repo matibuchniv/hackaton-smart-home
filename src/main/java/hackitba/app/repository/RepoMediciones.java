@@ -9,7 +9,7 @@ import hackitba.app.entitiy.MedicionCO2;
 
 public interface RepoMediciones extends JpaRepository<MedicionCO2, Long>  {
 
-    @Query("SELECT u FROM User u ORDER BY u.fecha ASC")
+    @Query("SELECT m FROM MedicionCO2 m ORDER BY m.fechaHoraMedicion ASC")
     List<MedicionCO2> findAllOrderByFechaAsc();
     
 }

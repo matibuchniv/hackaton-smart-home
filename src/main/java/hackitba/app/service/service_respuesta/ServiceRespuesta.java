@@ -10,13 +10,13 @@ import hackitba.app.repository.RepoMediciones;
 @Service
 public class ServiceRespuesta {
 
-    private boolean hayPersonas;
+    private boolean hayPersonas = true;
     private List<EstrategiaDeRespuesta> estrategias;
     private RepoMediciones repoMediciones;
 
-    public ServiceRespuesta(boolean hayPersonas, List<EstrategiaDeRespuesta> estrategias) {
-        this.hayPersonas = true;
+    public ServiceRespuesta(List<EstrategiaDeRespuesta> estrategias,RepoMediciones repoMediciones) {
         this.estrategias = estrategias;
+        this.repoMediciones = repoMediciones;
     } 
 
     public void setHayPersonas(boolean hayPersonas) {
