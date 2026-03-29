@@ -1,0 +1,8 @@
+target
+.mvn
+.idea
+.vscode
+__pycache__
+*.pyc
+.venv
+src/main/python/model/__pycache__

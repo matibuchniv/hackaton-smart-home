@@ -16,6 +16,7 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@/components/ui/alert";
+import { apiUrl } from "@/lib/api";
 
 // ─── Íconos SVG inline ────────────────────────────────────────────────────────
 
@@ -66,7 +67,7 @@ export default function Conexiones({ onNavigateToDashboard }: ConexionesProps) {
   const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:8080/dispositivos")
+    fetch(apiUrl("/dispositivos"))
       .then((res) => res.json())
       .then((data: string[]) => {
         setDispositivos(data);

@@ -1,0 +1,40 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      HOMEASSISTANT_BASE_URL: http://homeassistant:8123/api/services
+      HOMEASSISTANT_TOKEN: ${HOMEASSISTANT_TOKEN}
+    depends_on:
+      - homeassistant
+
+  python-client:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.python
+    environment:
+      JAVA_ENDPOINT: http://backend:8080/hayGente
+    depends_on:
+      - backend
+    devices:
+      - /dev/video0:/dev/video0
+
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    ports:
+      - "8123:8123"
+    volumes:
+      - ./homeassistant:/config
+    restart: unless-stopped

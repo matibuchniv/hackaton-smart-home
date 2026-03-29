@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { apiUrl } from "@/lib/api";
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 
@@ -132,7 +133,7 @@ export default function Dashboard() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("http://localhost:8080/dashboard")
+    fetch(apiUrl("/dashboard"))
       .then((res) => {
         if (!res.ok) throw new Error(`Error ${res.status}`);
         return res.json() as Promise<DashboardResponse>;

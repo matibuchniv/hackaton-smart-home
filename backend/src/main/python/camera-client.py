@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 import time
 import cv2
@@ -7,7 +8,7 @@ from ultralytics import YOLO
 model_path = Path(__file__).resolve().parent / "model" / "best.pt"
 model = YOLO(str(model_path))
 
-JAVA_ENDPOINT = "http://localhost:8081/person-status"
+JAVA_ENDPOINT = os.getenv("JAVA_ENDPOINT", "http://localhost:8080/hayGente")
 
 cap = cv2.VideoCapture(0)
 

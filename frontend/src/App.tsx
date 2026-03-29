@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/card'
 
 import { useNavigate } from 'react-router-dom'
+import { apiUrl } from '@/lib/api'
 
 type FormState = {
   email: string
@@ -47,7 +48,7 @@ export default function App() {
     setSubmitting(true)
     setSubmitError(null)
     try {
-      const res = await fetch('http://localhost:8080/onboard', {
+      const res = await fetch(apiUrl('/onboard'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
