@@ -29,7 +29,11 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
     public CorsConfigurationSource configurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(List.of("http://localhost:5173")); // Vite
+        config.setAllowedOrigins(List.of(
+            "http://localhost",
+            "http://localhost:80",
+            "http://localhost:5173"
+        ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true); // si usás cookies o auth

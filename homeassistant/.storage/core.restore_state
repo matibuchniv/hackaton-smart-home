@@ -4,17 +4,17 @@
   "key": "core.restore_state",
   "data": [
     {
-      "state": {"entity_id":"conversation.home_assistant","state":"unknown","attributes":{"friendly_name":"Home Assistant","supported_features":1},"last_changed":"2026-03-29T08:30:35.722066+00:00","last_reported":"2026-03-29T08:30:35.722066+00:00","last_updated":"2026-03-29T08:30:35.722066+00:00","context":{"id":"01KMWBERPA9177S620F7GVHJBK","parent_id":null,"user_id":null}},
+      "state": {"entity_id":"conversation.home_assistant","state":"unknown","attributes":{"friendly_name":"Home Assistant","supported_features":1},"last_changed":"2026-03-29T08:46:06.478307+00:00","last_reported":"2026-03-29T08:46:06.478307+00:00","last_updated":"2026-03-29T08:46:06.478307+00:00","context":{"id":"01KMWCB5ME4RC47RD5VTDY7835","parent_id":null,"user_id":null}},
       "extra_data": null,
-      "last_seen": "2026-03-29T08:31:43.526608+00:00"
+      "last_seen": "2026-03-29T08:48:21.850723+00:00"
     },
     {
-      "state": {"entity_id":"event.backup_automatic_backup","state":"unknown","attributes":{"event_types":["completed","failed","in_progress"],"event_type":null,"friendly_name":"Backup Automatic backup"},"last_changed":"2026-03-29T08:30:35.794482+00:00","last_reported":"2026-03-29T08:30:35.794482+00:00","last_updated":"2026-03-29T08:30:35.794482+00:00","context":{"id":"01KMWBERRJE7DSD7R6WB4S21FW","parent_id":null,"user_id":null}},
+      "state": {"entity_id":"event.backup_automatic_backup","state":"unknown","attributes":{"event_types":["completed","failed","in_progress"],"event_type":null,"friendly_name":"Backup Automatic backup"},"last_changed":"2026-03-29T08:46:06.549242+00:00","last_reported":"2026-03-29T08:46:06.549242+00:00","last_updated":"2026-03-29T08:46:06.549242+00:00","context":{"id":"01KMWCB5PNJ5AEP8CSFMJ14YEN","parent_id":null,"user_id":null}},
       "extra_data": {
         "last_event_type": null,
         "last_event_attributes": null
       },
-      "last_seen": "2026-03-29T08:31:43.526608+00:00"
+      "last_seen": "2026-03-29T08:48:21.850723+00:00"
     }
   ]
 }
