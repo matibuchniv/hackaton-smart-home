@@ -8,6 +8,7 @@ import hackitba.app.entitiy.MedicionCO2;
 import hackitba.app.entitiy.UserHome;
 import hackitba.app.repository.RepoMediciones;
 import hackitba.app.repository.RepoUserHome;
+import hackitba.app.service.ServiceVentana;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -18,6 +19,7 @@ public class ServiceRespuesta {
     private final List<EstrategiaDeRespuesta> estrategias;
     private final RepoMediciones repoMediciones;
     private final RepoUserHome repoUserHome;
+    private final ServiceVentana serviceVentana;
 
     public void setHayPersonas(boolean hayPersonas) {
         this.hayPersonas = hayPersonas;
@@ -52,4 +54,10 @@ public class ServiceRespuesta {
 
         estrategia.ejecutar(hayPersonas);
     }
+
+    public List<String> listaDispositivos() {
+        return List.of("");
+    }
+
+
 }
