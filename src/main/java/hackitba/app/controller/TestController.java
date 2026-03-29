@@ -12,9 +12,9 @@ public class TestController {
 
     private final WhatsAppAlertService whatsAppAlertService;
 
-    @GetMapping("/mensaje")
+    @GetMapping("/mensaje-test")
     public String enviarMensaje() {
-        whatsAppAlertService.sendAlert(8000);
+        whatsAppAlertService.sendRedAlert();
         return "mensaje enviado";
     }
     

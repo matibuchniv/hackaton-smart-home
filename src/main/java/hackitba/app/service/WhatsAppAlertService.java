@@ -27,10 +27,9 @@ public class WhatsAppAlertService {
         Twilio.init(accountSid, authToken);
     }
 
-    public void sendAlert(Integer co2Level) {
+    public void sendYellowAlert() {
         String body = String.format(
-            "ALERTA CO2\nNivel peligroso detectado: %d ppm\nEvacúe el área inmediatamente.",
-            co2Level
+            "ALERTA CO2\nNivel moderado detectado\nabriendo ventanas para mejorar ventilacion."
         );
 
         Message message = Message.creator(
@@ -41,6 +40,34 @@ public class WhatsAppAlertService {
 
         System.out.println("Mensaje enviado: " + message.getSid());
     }
+
+    public void sendOrangeAlert() {
+        String body = String.format(
+            "ALERTA CO2\nNivel alto detectado\nLa llave de paso fue cerrada y las ventanas abiertas, evite que personas habiten su hogar por tiempo prolongado."
+        );
+
+        Message message = Message.creator(
+            new PhoneNumber(toNumber),                  // destino
+            new PhoneNumber(fromNumber),               // sandbox de twilio
+            body
+        ).create();
+
+        System.out.println("Mensaje enviado: " + message.getSid());
+    }
+    public void sendRedAlert() {
+        String body = String.format(
+            "ALERTA CO2\nNivel peligroso detectado\nEvacúe el área inmediatamente."
+        );
+
+        Message message = Message.creator(
+            new PhoneNumber(toNumber),                  // destino
+            new PhoneNumber(fromNumber),               // sandbox de twilio
+            body
+        ).create();
+
+        System.out.println("Mensaje enviado: " + message.getSid());
+    }
+
 
 
 }

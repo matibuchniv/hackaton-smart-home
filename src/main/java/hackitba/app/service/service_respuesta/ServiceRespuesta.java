@@ -5,22 +5,19 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import hackitba.app.entitiy.MedicionCO2;
+import hackitba.app.entitiy.UserHome;
 import hackitba.app.repository.RepoMediciones;
-import lombok.Data;
+import hackitba.app.repository.RepoUserHome;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@Data
+@RequiredArgsConstructor
 public class ServiceRespuesta {
 
     private boolean hayPersonas = true;
     private final List<EstrategiaDeRespuesta> estrategias;
     private final RepoMediciones repoMediciones;
-
-    public ServiceRespuesta(List<EstrategiaDeRespuesta> estrategias,
-                            RepoMediciones repoMediciones) {
-        this.estrategias = estrategias;
-        this.repoMediciones = repoMediciones;
-    }
+    private final RepoUserHome repoUserHome;
 
     public void setHayPersonas(boolean hayPersonas) {
         this.hayPersonas = hayPersonas;
@@ -33,6 +30,7 @@ public class ServiceRespuesta {
     public void evaluarRespuesta() {
 
         List<MedicionCO2> mediciones = repoMediciones.findAllOrderByFechaAsc();
+        UserHome userHome = repoUserHome.findAll().getFirst();
 
         if (mediciones.isEmpty()) {
             throw new RuntimeException("❌ No hay mediciones en la base de datos");
@@ -48,10 +46,10 @@ public class ServiceRespuesta {
         System.out.println("📊 Estrategias disponibles: " + estrategias.size());
 
         EstrategiaDeRespuesta estrategia = estrategias.stream()
-                .filter(strategy -> strategy.aplica(medicion.getValor(),this.hayPersonas))
+                .filter(strategy -> strategy.aplica(medicion.getValor(),userHome))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("❌ Ninguna estrategia aplica"));
 
-        estrategia.ejecutar(medicion.getValor());
+        estrategia.ejecutar(hayPersonas);
     }
 }
