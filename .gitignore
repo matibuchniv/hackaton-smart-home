@@ -34,3 +34,7 @@ build/
 
 ### python ###
 venv
+
+### REACT ###
+frontend/node_modules
+frontend/dist
