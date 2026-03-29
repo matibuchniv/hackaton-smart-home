@@ -7,7 +7,7 @@ from ultralytics import YOLO
 model_path = Path(__file__).resolve().parent / "model" / "best.pt"
 model = YOLO(str(model_path))
 
-JAVA_ENDPOINT = "http://localhost:8080/person-status"
+JAVA_ENDPOINT = "http://localhost:8081/person-status"
 
 cap = cv2.VideoCapture(0)
 
