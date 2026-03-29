@@ -1,10 +1,13 @@
 package hackitba.app.service.service_respuesta;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import hackitba.app.dto.VentanaDto;
 import hackitba.app.entitiy.MedicionCO2;
 import hackitba.app.entitiy.UserHome;
 import hackitba.app.entitiy.Ventana;
@@ -40,7 +43,7 @@ public class ServiceRespuesta {
             throw new RuntimeException("❌ No hay mediciones en la base de datos");
         }
 
-        MedicionCO2 medicion = mediciones.get(mediciones.size() - 1);
+        MedicionCO2 medicion = mediciones.getLast();
 
         if (medicion.getValor() == null) {
             throw new RuntimeException("❌ El valor de la medición es null");
@@ -66,5 +69,29 @@ public class ServiceRespuesta {
         dispositivos.add("llave de paso 1");
     
         return dispositivos;
+    }
+
+    public Map<String,Object> generarDatosDashboard() {
+        Map<String,Object> datos = new HashMap<>();
+
+        datos.put("camara", true);
+        datos.put("llave", true);
+
+        List<MedicionCO2> mediciones = repoMediciones.findAllOrderByFechaAsc();
+        MedicionCO2 medicionCO2;
+
+        if(mediciones.isEmpty()) {
+        datos.put("sensor",0);
+        } else {
+        datos.put("sensor", mediciones.getLast().getValor().intValue());
+        }
+
+        List<VentanaDto> ventanaDtos = new ArrayList<>();
+        for (Ventana ventana : serviceVentana.obtenerTodas()) {
+           ventanaDtos.add(new VentanaDto(ventana.getNombre(),ventana.getAbierta())); 
+        }
+        datos.put("ventanas",ventanaDtos);
+
+        return datos;
     }
 }

@@ -1,6 +1,7 @@
 package hackitba.app.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,5 +33,10 @@ public class FrontEndController {
     public ResponseEntity<List<String>> provideDevices() {
 
         return ResponseEntity.ok(serviceRespuesta.listaDispositivos());
+    }
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<Map<String,Object>> provideDashBoardData() {
+        return ResponseEntity.ok(serviceRespuesta.generarDatosDashboard());
     }
 }

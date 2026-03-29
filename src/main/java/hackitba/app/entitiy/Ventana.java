@@ -2,10 +2,12 @@ package hackitba.app.entitiy;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 
 @Entity
 @Table(name = "ventanas")
 @Data
+@Getter
 public class Ventana {
 
     @Id
@@ -33,6 +35,10 @@ public class Ventana {
 
     public void cerrar(){
         this.abierta = false; 
+    }
+
+    public String getNombre() {
+        return "ventana" + this.id;
     }
 
 }
