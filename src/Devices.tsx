@@ -105,7 +105,7 @@ export default function Conexiones({ onNavigateToDashboard }: ConexionesProps) {
         </div>
 
         <Button
-          onClick={onNavigateToDashboard}
+          onClick={() => { window.location.href = "/dashboard"; }}
           variant="outline"
           size="sm"
           className="gap-2"
