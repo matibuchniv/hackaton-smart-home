@@ -18,19 +18,19 @@ import { useNavigate } from 'react-router-dom'
 type FormState = {
   email: string
   password: string
-  respiratoryOrCardiac: boolean
-  olderThanThreshold: boolean
-  youngerThanThreshold: boolean
-  emergencyContact: string
+  tieneEnfermedad: boolean
+  esMayorDeEdad: boolean
+  esMenorDeEdad: boolean
+  contactoDeEmergencia: string
 }
 
 const initialForm: FormState = {
   email: '',
   password: '',
-  respiratoryOrCardiac: false,
-  olderThanThreshold: false,
-  youngerThanThreshold: false,
-  emergencyContact: '',
+  tieneEnfermedad: false,
+  esMayorDeEdad: false,
+  esMenorDeEdad: false,
+  contactoDeEmergencia: '',
 }
 
 export default function App() {
@@ -41,7 +41,7 @@ export default function App() {
   const [submitError, setSubmitError] = useState<string | null>(null)
 
   const canContinueAuth = form.email.trim() !== '' && form.password.trim() !== ''
-  const canFinish = form.emergencyContact.trim() !== ''
+  const canFinish = form.contactoDeEmergencia.trim() !== ''
 
   const handleFinish = async () => {
     setSubmitting(true)
@@ -62,9 +62,9 @@ export default function App() {
 
   const thresholdSummary = useMemo(() => {
     const flags = [
-      form.respiratoryOrCardiac ? 'Resp/Cardíaco' : null,
-      form.olderThanThreshold ? 'Mayor a umbral' : null,
-      form.youngerThanThreshold ? 'Menor a umbral' : null,
+      form.tieneEnfermedad ? 'Resp/Cardíaco' : null,
+      form.esMayorDeEdad ? 'Mayor a umbral' : null,
+      form.esMenorDeEdad ? 'Menor a umbral' : null,
     ].filter(Boolean) as string[]
 
     return flags.length ? flags : null
@@ -142,18 +142,18 @@ export default function App() {
               <div className="grid grid-cols-3 gap-3">
                 <StatCard
                   label="Salud"
-                  value={form.respiratoryOrCardiac ? 'Alto' : 'Normal'}
-                  highlight={form.respiratoryOrCardiac}
+                  value={form.tieneEnfermedad ? 'Alto' : 'Normal'}
+                  highlight={form.tieneEnfermedad}
                 />
                 <StatCard
                   label="Edad"
-                  value={form.olderThanThreshold || form.youngerThanThreshold ? 'Sensitivo' : 'Base'}
-                  highlight={form.olderThanThreshold || form.youngerThanThreshold}
+                  value={form.esMayorDeEdad || form.esMenorDeEdad ? 'Sensitivo' : 'Base'}
+                  highlight={form.esMayorDeEdad || form.esMenorDeEdad}
                 />
                 <StatCard
                   label="Contacto"
-                  value={form.emergencyContact.trim() ? 'Cargado' : 'Pendiente'}
-                  highlight={!!form.emergencyContact.trim()}
+                  value={form.contactoDeEmergencia.trim() ? 'Cargado' : 'Pendiente'}
+                  highlight={!!form.contactoDeEmergencia.trim()}
                 />
               </div>
             </CardContent>
@@ -227,22 +227,22 @@ export default function App() {
                     id="respiratoryOrCardiac"
                     title="¿Hay alguien con enfermedades respiratorias y/o cardíacas?"
                     description="Asma, EPOC, cardiopatías u otros cuadros sensibles."
-                    checked={form.respiratoryOrCardiac}
-                    onChange={(checked) => update('respiratoryOrCardiac', checked)}
+                    checked={form.tieneEnfermedad}
+                    onChange={(checked) => update('tieneEnfermedad', checked)}
                   />
                   <ToggleRow
                     id="olderThanThreshold"
                     title="¿Hay alguien en la casa mayor a x años?"
                     description="Marcá esta opción si el hogar tiene personas mayores."
-                    checked={form.olderThanThreshold}
-                    onChange={(checked) => update('olderThanThreshold', checked)}
+                    checked={form.esMayorDeEdad}
+                    onChange={(checked) => update('esMayorDeEdad', checked)}
                   />
                   <ToggleRow
                     id="youngerThanThreshold"
                     title="¿Hay alguien en la casa menor a x años?"
                     description="Marcá esta opción si el hogar tiene menores."
-                    checked={form.youngerThanThreshold}
-                    onChange={(checked) => update('youngerThanThreshold', checked)}
+                    checked={form.esMenorDeEdad}
+                    onChange={(checked) => update('esMenorDeEdad', checked)}
                   />
 
                   <div className="flex gap-3 pt-2">
@@ -269,9 +269,9 @@ export default function App() {
                     <Input
                       id="emergencyContact"
                       type="text"
-                      placeholder="Nombre y teléfono"
-                      value={form.emergencyContact}
-                      onChange={(e) => update('emergencyContact', e.target.value)}
+                      placeholder="Numero de teléfono"
+                      value={form.contactoDeEmergencia}
+                      onChange={(e) => update('contactoDeEmergencia', e.target.value)}
                     />
                   </div>
 
