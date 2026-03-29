@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 
 import hackitba.app.entitiy.MedicionCO2;
 import hackitba.app.entitiy.UserHome;
+import hackitba.app.entitiy.Ventana;
 import hackitba.app.repository.RepoMediciones;
 import hackitba.app.repository.RepoUserHome;
+import hackitba.app.service.ServiceVentana;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -19,6 +21,7 @@ public class ServiceRespuesta {
     private final List<EstrategiaDeRespuesta> estrategias;
     private final RepoMediciones repoMediciones;
     private final RepoUserHome repoUserHome;
+    private final ServiceVentana serviceVentana;
 
     public void setHayPersonas(boolean hayPersonas) {
         this.hayPersonas = hayPersonas;
@@ -56,7 +59,12 @@ public class ServiceRespuesta {
 
     public List<String> listaDispositivos() {
         List<String> dispositivos = new ArrayList<>();
-        dispositivos.add("camara");
-        return List.of("");
+        dispositivos.add("camara 1");
+        for (Ventana ventana : serviceVentana.obtenerTodas()) {
+           dispositivos.add("ventana" + ventana.getId()); 
+        }
+        dispositivos.add("llave de paso 1");
+    
+        return dispositivos;
     }
 }
