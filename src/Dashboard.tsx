@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,18 +23,43 @@ type DatosHogar = {
   personasEnCasa: boolean;
 };
 
-// ─── Datos hardcodeados ───────────────────────────────────────────────────────
+// ─── Tipos del backend ────────────────────────────────────────────────────────
 
-const DATOS: DatosHogar = {
-  co2: { valor: 842, nivel: "moderada" },
-  valvulaGas: "cerrada",
-  ventanas: [
-    { id: "v1", nombre: "Ventana sala", estado: "abierta" },
-    { id: "v2", nombre: "Ventana dormitorio", estado: "cerrada" },
-    { id: "v3", nombre: "Ventana cocina", estado: "abierta" },
-  ],
-  personasEnCasa: true,
+type VentanaDto = {
+  nombre: string;
+  abierto: boolean;
 };
+
+type DashboardResponse = {
+  camara: boolean;
+  llave: boolean;
+  sensor: number;
+  ventanas: VentanaDto[];
+};
+
+// ─── Helpers de mapeo ─────────────────────────────────────────────────────────
+
+function nivelDesdePpm(ppm: number): NivelCO2 {
+  if (ppm < 600) return "baja";
+  if (ppm <= 1000) return "moderada";
+  return "alta";
+}
+
+function mapearRespuesta(data: DashboardResponse): DatosHogar {
+  return {
+    co2: {
+      valor: data.sensor,
+      nivel: nivelDesdePpm(data.sensor),
+    },
+    valvulaGas: data.llave ? "abierta" : "cerrada",
+    ventanas: data.ventanas.map((v, i) => ({
+      id: `v${i + 1}`,
+      nombre: v.nombre,
+      estado: v.abierto ? "abierta" : "cerrada",
+    })),
+    personasEnCasa: data.camara,
+  };
+}
 
 // ─── Helpers de color CO₂ ─────────────────────────────────────────────────────
 
@@ -102,7 +128,36 @@ const IconPerson = ({ presente }: { presente: boolean }) => (
 // ─── Componente principal ─────────────────────────────────────────────────────
 
 export default function Dashboard() {
-  const { co2, valvulaGas, ventanas, personasEnCasa } = DATOS;
+  const [datos, setDatos] = useState<DatosHogar | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/dashboard")
+      .then((res) => {
+        if (!res.ok) throw new Error(`Error ${res.status}`);
+        return res.json() as Promise<DashboardResponse>;
+      })
+      .then((data) => setDatos(mapearRespuesta(data)))
+      .catch((err) => setError(err.message));
+  }, []);
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <p className="text-sm text-muted-foreground">Error al cargar los datos: {error}</p>
+      </div>
+    );
+  }
+
+  if (!datos) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <p className="text-sm text-muted-foreground">Cargando...</p>
+      </div>
+    );
+  }
+
+  const { co2, valvulaGas, ventanas, personasEnCasa } = datos;
   const co2Cfg = CO2_CONFIG[co2.nivel];
   const co2Pct = CO2_PORCENTAJE[co2.nivel];
 
