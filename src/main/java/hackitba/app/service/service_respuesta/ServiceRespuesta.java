@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 
 import hackitba.app.entitiy.MedicionCO2;
 import hackitba.app.repository.RepoMediciones;
+import lombok.Data;
 
 @Service
+@Data
 public class ServiceRespuesta {
 
     private boolean hayPersonas = true;
@@ -22,6 +24,10 @@ public class ServiceRespuesta {
 
     public void setHayPersonas(boolean hayPersonas) {
         this.hayPersonas = hayPersonas;
+    }
+    
+    public boolean getHayPersonas() {
+        return this.hayPersonas;
     }
 
     public void evaluarRespuesta() {
@@ -42,7 +48,7 @@ public class ServiceRespuesta {
         System.out.println("📊 Estrategias disponibles: " + estrategias.size());
 
         EstrategiaDeRespuesta estrategia = estrategias.stream()
-                .filter(strategy -> strategy.aplica(medicion.getValor()))
+                .filter(strategy -> strategy.aplica(medicion.getValor(),this.hayPersonas))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("❌ Ninguna estrategia aplica"));
 
