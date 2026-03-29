@@ -1,12 +1,14 @@
 package hackitba.app.entitiy;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@NoArgsConstructor
 @Data
+@Getter
+@AllArgsConstructor
 public class Llave {
-    boolean abierta;
+    private boolean abierta;
 
     public void setAbierta(boolean b) {
         this.abierta = b;

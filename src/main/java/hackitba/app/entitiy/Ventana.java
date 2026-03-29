@@ -20,9 +20,8 @@ public class Ventana {
 
     public Ventana() {}
 
-    public Ventana(String descripcion) {
-        this.descripcion = descripcion;
-        this.abierta = false;
+    public Ventana(boolean abierta) {
+        this.abierta = abierta;
     }
 
     public String getDeviceId(){

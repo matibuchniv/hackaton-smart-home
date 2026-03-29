@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import hackitba.app.entitiy.Ventana;
 import hackitba.app.entitiy.VentanaIoTAdapter;
 import hackitba.app.repository.RepoVentana;
+import jakarta.transaction.Transactional;
 
 @Service
 public class ServiceVentana {
@@ -18,6 +19,7 @@ public class ServiceVentana {
     @Autowired
     private VentanaIoTAdapter ventanaIoT;
 
+    @Transactional
     public Ventana guardar(Ventana ventana) {
         return repoVentana.save(ventana);
     }
@@ -26,21 +28,17 @@ public class ServiceVentana {
         return repoVentana.findAll();
     }
 
+    @Transactional
     public void abrirVentanas() {
         List<Ventana> ventanas = repoVentana.findAll();
 
         for (Ventana v : ventanas) {
-            if (v.getDeviceId() != null && !v.getDeviceId().isEmpty()) {
-                ventanaIoT.abrir(v.getDeviceId());
-                v.abrir();
-            } else {
-                System.out.println("⚠️ Ventana sin deviceId: " + v.getDescripcion());
-            }
+            v.abrir();
         }
 
-        repoVentana.saveAll(ventanas);
     }
 
+    @Transactional
     public void cerrarVentanas() {
         List<Ventana> ventanas = repoVentana.findAll();
 
@@ -49,7 +47,6 @@ public class ServiceVentana {
             v.cerrar();
         }
 
-        repoVentana.saveAll(ventanas);
     }
 
 }

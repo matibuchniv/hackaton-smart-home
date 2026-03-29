@@ -13,6 +13,7 @@ import hackitba.app.entitiy.UserHome;
 import hackitba.app.entitiy.Ventana;
 import hackitba.app.repository.RepoMediciones;
 import hackitba.app.repository.RepoUserHome;
+import hackitba.app.service.ServiceLlave;
 import hackitba.app.service.ServiceVentana;
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +26,7 @@ public class ServiceRespuesta {
     private final RepoMediciones repoMediciones;
     private final RepoUserHome repoUserHome;
     private final ServiceVentana serviceVentana;
+    private final ServiceLlave serviceLlave;
 
     public void setHayPersonas(boolean hayPersonas) {
         this.hayPersonas = hayPersonas;
@@ -40,22 +42,20 @@ public class ServiceRespuesta {
         UserHome userHome = repoUserHome.findAll().getFirst();
 
         if (mediciones.isEmpty()) {
-            throw new RuntimeException("❌ No hay mediciones en la base de datos");
+            throw new RuntimeException(" No hay mediciones en la base de datos");
         }
 
         MedicionCO2 medicion = mediciones.getLast();
 
         if (medicion.getValor() == null) {
-            throw new RuntimeException("❌ El valor de la medición es null");
+            throw new RuntimeException(" El valor de la medición es null");
         }
 
-        System.out.println("📊 Valor medición: " + medicion.getValor());
-        System.out.println("📊 Estrategias disponibles: " + estrategias.size());
 
         EstrategiaDeRespuesta estrategia = estrategias.stream()
                 .filter(strategy -> strategy.aplica(medicion.getValor(),userHome))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("❌ Ninguna estrategia aplica"));
+                .orElseThrow(() -> new RuntimeException(" Ninguna estrategia aplica"));
 
         estrategia.ejecutar(hayPersonas);
     }
@@ -75,10 +75,9 @@ public class ServiceRespuesta {
         Map<String,Object> datos = new HashMap<>();
 
         datos.put("camara", true);
-        datos.put("llave", true);
+        datos.put("llave", serviceLlave.getLlave().isAbierta());
 
         List<MedicionCO2> mediciones = repoMediciones.findAllOrderByFechaAsc();
-        MedicionCO2 medicionCO2;
 
         if(mediciones.isEmpty()) {
         datos.put("sensor",0);

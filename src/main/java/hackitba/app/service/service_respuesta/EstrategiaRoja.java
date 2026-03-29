@@ -3,6 +3,7 @@ package hackitba.app.service.service_respuesta;
 import org.springframework.stereotype.Component;
 
 import hackitba.app.entitiy.UserHome;
+import hackitba.app.service.ServiceLlave;
 import hackitba.app.service.ServiceVentana;
 import hackitba.app.service.WhatsAppAlertService;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +12,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EstrategiaRoja implements EstrategiaDeRespuesta {
 
-    private WhatsAppAlertService whatsAppAlertService;
-    private ServiceVentana serviceVentana;
+    private final WhatsAppAlertService whatsAppAlertService;
+    private final ServiceVentana serviceVentana;
+    private final ServiceLlave serviceLlave;
     
     @Override
     public boolean aplica(Integer ultimaMedicion, UserHome userHome) {
@@ -27,6 +29,7 @@ public class EstrategiaRoja implements EstrategiaDeRespuesta {
     public void ejecutar(boolean hayPersonas) {
         whatsAppAlertService.sendRedAlert();
         serviceVentana.abrirVentanas();
+        serviceLlave.cerrarLlave();
     }
 }
 

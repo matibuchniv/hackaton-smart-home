@@ -15,4 +15,8 @@ public class ServiceUserHome {
     public void cargarUserHome(UserHome userHome) {
         repoUserHome.save(userHome);
     }
+
+    public boolean hayUserHome() {
+        return !repoUserHome.findAll().isEmpty();
+    }
 }

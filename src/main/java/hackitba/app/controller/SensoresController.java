@@ -31,8 +31,6 @@ public class SensoresController {
 
         Integer numero = request.value(); 
 
-        System.out.print("numero recibido: " +  numero.toString());
-
         MedicionCO2 medicion = new MedicionCO2(numero,LocalDateTime.now());
 
         serviceCO2.cargarMedicion(medicion);
