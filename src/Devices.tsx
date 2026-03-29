@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,22 +16,6 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@/components/ui/alert";
-
-// ─── Tipos ────────────────────────────────────────────────────────────────────
-
-type Dispositivo = {
-  id: string;
-  tipo: string;
-};
-
-// ─── Datos hardcodeados ───────────────────────────────────────────────────────
-
-const DISPOSITIVOS: Dispositivo[] = [
-  { id: "001", tipo: "Cámara" },
-  { id: "002", tipo: "Sensor CO₂" },
-  { id: "003", tipo: "Ventana" },
-  { id: "004", tipo: "Llave de paso de gas" },
-];
 
 // ─── Íconos SVG inline ────────────────────────────────────────────────────────
 
@@ -77,6 +61,25 @@ export default function Conexiones({ onNavigateToDashboard }: ConexionesProps) {
   const [conectado, setConectado] = useState(false);
   const [error, setError] = useState("");
 
+  // ── Estado de dispositivos ──────────────────────────────────────────────────
+  const [dispositivos, setDispositivos] = useState<string[]>([]);
+  const [cargando, setCargando] = useState(true);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/dispositivos")
+      .then((res) => res.json())
+      .then((data: string[]) => {
+        setDispositivos(data);
+      })
+      .catch(() => {
+        setDispositivos([]);
+      })
+      .finally(() => {
+        setCargando(false);
+      });
+  }, []);
+  // ───────────────────────────────────────────────────────────────────────────
+
   const handleConectar = () => {
     if (!usuario.trim() || !contrasena.trim()) {
       setError("Completá usuario y contraseña para continuar.");
@@ -84,7 +87,6 @@ export default function Conexiones({ onNavigateToDashboard }: ConexionesProps) {
     }
     setError("");
     setConectando(true);
-    // Simula latencia de conexión
     setTimeout(() => {
       setConectando(false);
       setConectado(true);
@@ -135,7 +137,6 @@ export default function Conexiones({ onNavigateToDashboard }: ConexionesProps) {
           </CardHeader>
 
           <CardContent className="flex flex-col gap-5">
-            {/* Instrucciones */}
             <ol className="flex flex-col gap-2 text-sm text-muted-foreground">
               {[
                 "Asegurate de que tu instancia de Home Assistant esté encendida y accesible en tu red local.",
@@ -153,7 +154,6 @@ export default function Conexiones({ onNavigateToDashboard }: ConexionesProps) {
 
             <Separator />
 
-            {/* Formulario */}
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
                 <Label htmlFor="usuario" className="text-sm">
@@ -223,7 +223,7 @@ export default function Conexiones({ onNavigateToDashboard }: ConexionesProps) {
                 </CardTitle>
               </div>
               <Badge variant="secondary" className="text-xs">
-                {DISPOSITIVOS.length}
+                {cargando ? "…" : dispositivos.length}
               </Badge>
             </div>
             <CardDescription className="text-sm">
@@ -232,21 +232,23 @@ export default function Conexiones({ onNavigateToDashboard }: ConexionesProps) {
           </CardHeader>
 
           <CardContent>
-            <ul className="flex flex-col divide-y">
-              {DISPOSITIVOS.map((d) => (
-                <li
-                  key={d.id}
-                  className="flex items-center justify-between py-3 first:pt-0 last:pb-0"
-                >
-                  <span className="text-sm font-medium">
-                    {d.tipo} #{d.id}
-                  </span>
-                  <Badge variant="outline" className="text-xs font-normal">
-                    Activo
-                  </Badge>
-                </li>
-              ))}
-            </ul>
+            {cargando ? (
+              <p className="text-sm text-muted-foreground">Cargando dispositivos…</p>
+            ) : (
+              <ul className="flex flex-col divide-y">
+                {dispositivos.map((nombre, i) => (
+                  <li
+                    key={i}
+                    className="flex items-center justify-between py-3 first:pt-0 last:pb-0"
+                  >
+                    <span className="text-sm font-medium">{nombre}</span>
+                    <Badge variant="outline" className="text-xs font-normal">
+                      Activo
+                    </Badge>
+                  </li>
+                ))}
+              </ul>
+            )}
           </CardContent>
         </Card>
 
